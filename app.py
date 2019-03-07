@@ -14,9 +14,10 @@ from sanic.request import Request as _Request
 from sanic.response import text
 from sanic_session import Session, MemcacheSessionInterface
 
-import config
-from ext import auth, mako, sentry, init_db, context
-
+import config 
+from ext import auth, mako, init_db, context
+from config import  DB_URL
+from models.model import db
 
 from werkzeug.utils import find_modules, import_string
 
@@ -48,9 +49,7 @@ app.config.from_object(config)
 auth.setup(app)
 # mako 模板初始化
 mako.init_app(app, context_processors=())
-# 如果配置了应用程序监控配置项，就初始化
-if sentry is not None:
-    sentry.init_app(app)
+
 # 注册views目录下的所有蓝图
 register_blueprints('views', app)
 # 静态文件注册
@@ -62,10 +61,11 @@ redis = None
 
 # 注册服务启动前监听器
 @app.listener('before_server_start')
-async def setup_db(app, loop):
+async def setup_connection(app, loop):
     global client
     # 初始化orm
     await init_db()
+
 
     # 创建缓存链路
     client = aiomcache.Client(config.MEMCACHED_HOST, config.MEMCACHED_PORT, loop=loop)  # noqa

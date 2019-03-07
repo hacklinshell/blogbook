@@ -1,6 +1,6 @@
 import os
 #测试时候数据库用户名root  密码password   
-DB_URL = 'mysql://root:password@127.0.0.1:3306/test?charset=utf8'
+DB_URL = 'postgresql+asyncpg://postgres:password@127.0.0.1:5432/postgres'
 REDIS_URL = 'redis://localhost:6379'
 
 DEBUG = False
