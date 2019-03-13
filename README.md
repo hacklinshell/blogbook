@@ -1,1 +1,1 @@
-## 使用sanic从0开始搭建blog
+## python sanic  db others learn
